@@ -18,6 +18,9 @@
   p{color:#8d8696;font-size:14px;margin:6px 0 18px}
   a.btn{display:inline-block;background:#e8a13c;color:#141216;font-weight:700;
     text-decoration:none;padding:14px 30px;border-radius:12px}
+  footer{position:fixed;left:0;right:0;bottom:14px;text-align:center;
+    color:#8d8696;font-size:12px;letter-spacing:.03em;padding:0 16px}
+  footer b{color:#e8a13c}
 </style>
 </head>
 <body>
@@ -27,13 +30,14 @@
   <p>Otevírám program…</p>
   <a class="btn" id="go" href="#">Otevřít appku 🤘</a>
 </div>
+<footer>© 2026 <b>Bob</b> · Forged for metalheads. Handle with horns. 🤘</footer>
 <script>
 // >>> SEM VLOŽ URL NASAZENÉ APPKY (končí /exec) <<<
-var APP_URL = 'VLOZ_URL_APPKY';
+var APP_URL = 'https://script.google.com/macros/s/AKfycbwwjYda9BPXsE2vXbABkAdyYhDdiKonQ7L3EJS1jU67nC6qLwA2Yjo48TcMiZTVbkU48A/exec';
 
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 var go = document.getElementById('go');
-if (APP_URL.indexOf('https://script.google.com/macros/s/AKfycbwwjYda9BPXsE2vXbABkAdyYhDdiKonQ7L3EJS1jU67nC6qLwA2Yjo48TcMiZTVbkU48A/exec') === 0) {
+if (APP_URL.indexOf('https://') === 0) {
   go.href = APP_URL;
   setTimeout(function(){ location.replace(APP_URL); }, 600);
 } else {
