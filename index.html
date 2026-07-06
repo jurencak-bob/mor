@@ -92,15 +92,29 @@ var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 if (APP_URL.indexOf('https://') !== 0) {
   msg.textContent = 'Chybí nastavená adresa appky (APP_URL v index.html).';
 } else if (isStandalone) {
-  // spuštěno z ikony na ploše -> rovnou do appky
+  // Spuštěno z ikony: appku otevíráme v celoplošném rámu (neopouštíme doménu,
+  // jinak Chrome/Edge nasadí lištu prohlížeče). Rám se načítá NA POZADÍ –
+  // bubnující logo zůstává na očích, dokud appka nenaběhne (žádné bílo).
   go.href = APP_URL;
-  setTimeout(function(){ // V nainstalované appce NEopouštíme doménu (Chrome/Edge by ukázaly
-      // lištu prohlížeče) – appku vložíme do celoplošného rámu.
-      document.documentElement.style.background='#141216';
-      document.body.innerHTML=
-        '<iframe src="'+APP_URL+'" style="position:fixed;inset:0;width:100%;'+
-        'height:100%;border:0;background:#141216" allow="clipboard-write" '+
-        'title="MOR 2026"></iframe>'; }, 250);
+  msg.textContent = 'Ladíme pódium…';
+  var fr = document.createElement('iframe');
+  fr.title = 'MOR 2026';
+  fr.allow = 'clipboard-write';
+  fr.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;'+
+    'background:#141216;opacity:0;transition:opacity .25s;z-index:50';
+  var shown = false;
+  function reveal(){
+    if (shown) return; shown = true;
+    fr.style.opacity = '1';
+  }
+  fr.addEventListener('load', function(){ setTimeout(reveal, 150); });
+  setTimeout(reveal, 12000);   // pojistka: po 12 s ukázat rám tak jako tak
+  // záchrana pro případ problému s přihlášením v rámu
+  setTimeout(function(){
+    if (!shown) msg.innerHTML = 'Trvá to? <a href="'+APP_URL+'" '+
+      'style="color:#e8a13c">Otevřít appku napřímo</a>';
+  }, 8000);
+  document.body.appendChild(fr);
 } else {
   // otevřeno v prohlížeči -> NEredirectovat, ukázat instalaci
   go.href = APP_URL;
