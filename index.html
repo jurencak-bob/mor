@@ -94,7 +94,13 @@ if (APP_URL.indexOf('https://') !== 0) {
 } else if (isStandalone) {
   // spuštěno z ikony na ploše -> rovnou do appky
   go.href = APP_URL;
-  setTimeout(function(){ location.replace(APP_URL); }, 250);
+  setTimeout(function(){ // V nainstalované appce NEopouštíme doménu (Chrome/Edge by ukázaly
+      // lištu prohlížeče) – appku vložíme do celoplošného rámu.
+      document.documentElement.style.background='#141216';
+      document.body.innerHTML=
+        '<iframe src="'+APP_URL+'" style="position:fixed;inset:0;width:100%;'+
+        'height:100%;border:0;background:#141216" allow="clipboard-write" '+
+        'title="MOR 2026"></iframe>'; }, 250);
 } else {
   // otevřeno v prohlížeči -> NEredirectovat, ukázat instalaci
   go.href = APP_URL;
